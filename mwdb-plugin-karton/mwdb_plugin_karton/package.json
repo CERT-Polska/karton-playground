@@ -1,0 +1,15 @@
+{
+  "name": "@mwdb-web/plugin-karton",
+  "version": "1.0.0",
+  "main": "web/index.js",
+  "peerDependencies": {
+    "@fortawesome/fontawesome-svg-core": "*",
+    "@fortawesome/free-solid-svg-icons": "*",
+    "@fortawesome/react-fontawesome": "*",
+    "react": "*",
+    "react-router-dom": "*",
+    "react-redux": "*",
+    "readable-timestamp": "*",
+    "@mwdb-web/commons": "^2.0.0"
+  }
+}

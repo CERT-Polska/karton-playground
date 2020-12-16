@@ -1,0 +1,19 @@
+FROM python:3.6
+
+RUN apt update && apt install -y build-essential libffi-dev libfuzzy-dev postgresql-client libmagic1 nodejs npm
+
+COPY mwdb-core/ /tmp/mwdb-core/
+RUN pip install /tmp/mwdb-core/
+
+COPY karton/ /tmp/karton/
+RUN pip install /tmp/karton/
+
+COPY mwdb-plugin-karton/ /tmp/mwdb-plugin-karton/
+RUN pip install /tmp/mwdb-plugin-karton/
+
+COPY docker/mwdb.ini docker/uwsgi.ini docker/start.sh docker/karton.ini /app/
+
+WORKDIR /app
+# Make fresh web build including plugins
+RUN mwdb-core configure web
+CMD ["/app/start.sh"]

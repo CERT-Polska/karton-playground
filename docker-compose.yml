@@ -1,0 +1,56 @@
+version: "3.3"
+services:
+  minio:
+    image: minio/minio
+    command: "server --address 0.0.0.0:9000 /data"
+    environment:
+      MINIO_ACCESS_KEY: mwdb
+      MINIO_SECRET_KEY: mwdbmwdb
+    ports:
+      - "127.0.0.1:8090:9000"
+  postgres:
+    image: postgres:13.1
+    environment:
+      POSTGRES_USER: mwdb
+      POSTGRES_DB: mwdb
+      POSTGRES_PASSWORD: mwdbsecretpass
+  redis:
+    image: redis:alpine
+  mwdb:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-mwdb
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    environment:
+      MWDB_REDIS_URI: "redis://redis/"
+      MWDB_POSTGRES_URI: "postgresql://mwdb:mwdbsecretpass@postgres/mwdb"
+      MWDB_ADMIN_PASSWORD: "admin"
+      UWSGI_PROCESSES: 4
+    ports:
+      - "127.0.0.1:8080:8080"
+  karton-system:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-karton-system
+    depends_on:
+      - redis
+      - minio
+  karton-classifier:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-karton-classifier
+    depends_on:
+      - redis
+      - minio
+  karton-dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-karton-dashboard
+    depends_on:
+      - redis
+      - minio
+    ports:
+      - "127.0.0.1:8030:3000"

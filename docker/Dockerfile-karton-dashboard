@@ -1,0 +1,15 @@
+FROM python:3.7
+
+WORKDIR /app
+COPY karton-dashboard/src/requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY karton /tmp/karton
+RUN pip install /tmp/karton/
+
+COPY karton-dashboard/README.md /app/README.md
+COPY karton-dashboard/src /app/src
+COPY docker/karton.ini /app/src/karton.ini
+
+WORKDIR /app/src
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "3000"]

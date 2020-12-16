@@ -1,0 +1,12 @@
+[submodule "mwdb-core"]
+	path = mwdb-core
+	url = https://github.com/CERT-Polska/mwdb-core.git
+[submodule "karton"]
+	path = karton
+	url = https://github.com/CERT-Polska/karton.git
+[submodule "karton-classifier"]
+	path = karton-classifier
+	url = https://github.com/CERT-Polska/karton-classifier.git
+[submodule "karton-dashboard"]
+	path = karton-dashboard
+	url = https://github.com/CERT-Polska/karton-dashboard.git

@@ -1,0 +1,12 @@
+FROM python:3.6
+
+COPY karton-classifier/ /tmp/karton-classifier
+RUN pip install /tmp/karton-classifier
+
+COPY karton/ /tmp/karton/
+RUN pip install /tmp/karton/
+
+WORKDIR /app
+COPY docker/karton.ini /app/karton.ini
+
+CMD karton-classifier

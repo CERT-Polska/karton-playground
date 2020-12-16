@@ -4,7 +4,7 @@ import FirstAnalysisBanner from "./FirstAnalysisBanner"
 
 export default {
     attributeRenderers: {
-        "karton2": KartonAttributeRenderer
+        "karton": KartonAttributeRenderer
     },
     attributesListBefore: [
         FirstAnalysisBanner

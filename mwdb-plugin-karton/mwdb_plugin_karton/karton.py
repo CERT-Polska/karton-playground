@@ -1,8 +1,10 @@
+import logging
+import shutil
+import tempfile
 from typing import Optional
 
 from flask import g
 
-from mwdb.core import log
 from mwdb.model import Object, File, Config
 from mwdb.core.plugins import PluginHookHandler
 
@@ -13,11 +15,22 @@ from karton.core.task import TaskPriority
 
 from .config import config
 
-logger = log.getLogger()
+logger = logging.getLogger("mwdb.plugin.karton")
 
 
 def send_file_to_karton(file: File) -> str:
-    path = file.get_path()
+
+    try:
+        path = file.get_path()
+        tmpfile = None
+    except Exception:
+        # If get_path doesn't work: download content to NamedTemporaryFile
+        tmpfile = tempfile.NamedTemporaryFile()
+        file_stream = file.open()
+        shutil.copyfileobj(file_stream, tmpfile)
+        File.close(file_stream)
+        path = tmpfile.name
+
     producer = Producer(
         identity="karton.mwdb",
         config=KartonConfig(config.karton.config_path)
@@ -38,6 +51,10 @@ def send_file_to_karton(file: File) -> str:
         priority=task_priority
     )
     producer.send_task(task)
+
+    if tmpfile is not None:
+        tmpfile.close()
+
     file.add_metakey("karton", task.root_uid, check_permissions=False)
     logger.info("File sent to Karton with %s", task.root_uid)
     return task.root_uid

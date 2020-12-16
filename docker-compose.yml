@@ -54,3 +54,10 @@ services:
       - minio
     ports:
       - "127.0.0.1:8030:3000"
+  karton-mwdb-reporter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-karton-mwdb-reporter
+    depends_on:
+      - redis
+      - minio

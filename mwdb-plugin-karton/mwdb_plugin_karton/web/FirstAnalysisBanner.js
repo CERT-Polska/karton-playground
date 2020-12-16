@@ -10,7 +10,7 @@ function FirstAnalysisBanner(props) {
 
     if(Object.keys(props.attributes).some(
         label => props.attributes[label].some(
-            attr => attr.key == "karton2"
+            attr => attr.key == "karton"
         )
     ))
         return []

@@ -114,7 +114,7 @@ function KartonAttributeRow(props) {
 
     let actionButtons = (
         <div>
-            <Link to={makeSearchLink("meta.karton2", props.uid)}>
+            <Link to={makeSearchLink("meta.karton", props.uid)}>
                 <span className="badge badge-primary">
                     <FontAwesomeIcon icon={faSearch} pull="left" />
                     Search artifacts

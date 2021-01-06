@@ -5,7 +5,7 @@ from typing import Optional
 
 from flask import g
 
-from mwdb.model import Object, File, Config
+from mwdb.model import Config, File, Object
 from mwdb.core.plugins import PluginHookHandler
 
 from karton.core import Config as KartonConfig, Producer, Task, Resource

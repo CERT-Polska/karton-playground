@@ -16,6 +16,8 @@ services:
       POSTGRES_PASSWORD: mwdbsecretpass
   redis:
     image: redis:alpine
+    ports:
+      - "127.0.0.1:8379:6379"
   mwdb:
     build:
       context: .
@@ -24,6 +26,9 @@ services:
       - postgres
       - redis
       - minio
+    volumes:
+      - ./config/karton.ini:/etc/karton/karton.ini
+      - ./config/mwdb.ini:/app/mwdb.ini
     environment:
       MWDB_REDIS_URI: "redis://redis/"
       MWDB_POSTGRES_URI: "postgresql://mwdb:mwdbsecretpass@postgres/mwdb"
@@ -37,7 +42,7 @@ services:
       - redis
       - minio
     volumes:
-      - ./config:/etc/karton
+      - ./config/karton.ini:/etc/karton/karton.ini
     entrypoint: karton-system
     command: --setup-bucket
   karton-classifier:
@@ -46,20 +51,20 @@ services:
       - redis
       - minio
     volumes:
-      - ./config:/etc/karton
+      - ./config/karton.ini:/etc/karton/karton.ini
   karton-dashboard:
     image: certpl/karton-dashboard:78f6ac8f1dcb0fdbc194ea8fbbfc46c1575686f6
     depends_on:
       - redis
       - minio
     volumes:
-      - ./config:/etc/karton
+      - ./config/karton.ini:/etc/karton/karton.ini
     ports:
-      - "127.0.0.1:8030:3000"
+      - "127.0.0.1:8030:5000"
   karton-mwdb-reporter:
     image: certpl/karton-mwdb-reporter:b8dc658b2f5489f7d9776970e6cd5fcca3ff0503
     depends_on:
       - redis
       - minio
     volumes:
-      - ./config:/etc/karton
+      - ./config/karton.ini:/etc/karton/karton.ini

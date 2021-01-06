@@ -6,9 +6,10 @@ RUN apt update && apt install -y build-essential libffi-dev libfuzzy-dev postgre
 COPY mwdb-plugin-karton/ /tmp/mwdb-plugin-karton/
 RUN pip install mwdb-core==2.1.2 karton-core==4.0.5 /tmp/mwdb-plugin-karton/
 
-COPY config/mwdb.ini docker/uwsgi.ini docker/start.sh /app/
+COPY docker/uwsgi.ini docker/start.sh /app/
 
 WORKDIR /app
 # Make fresh web build including plugins
+ENV MWDB_WEB_FOLDER /app/web
 RUN mwdb-core configure web
 CMD ["/app/start.sh"]

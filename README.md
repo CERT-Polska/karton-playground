@@ -1,6 +1,6 @@
 # Karton Playground: getting started
 
-![](/uploads/upload_b7d8d61a76ba1cd8ec411d6b2a738cf9.png)
+![](/img/upload_b7d8d61a76ba1cd8ec411d6b2a738cf9.png)
 
 This is a repository that will help you get into Karton and create your own services immediately.
 
@@ -32,15 +32,15 @@ First, open the `mwdb-core` UI. This is the main interface for most of the users
 
 Open your browser and navigate to http://127.0.0.1:8080. You should see this:
 
-![](/uploads/upload_75219ec442a89156f0801e11cfdb0fe2.png)
+![](/img/upload_75219ec442a89156f0801e11cfdb0fe2.png)
 
 Now login with username `admin` and password `admin`. Volia, an empty malware database:
 
-![](/uploads/upload_2088af2b5927b5928773648be95ff313.png)
+![](/img/upload_2088af2b5927b5928773648be95ff313.png)
 
 But there is no malware yet. This is about to change. But first, check out the karton dashboard too. Navigate to http://127.0.0.1:8030 and see:
 
-![](/uploads/upload_47c57a6d265998ce38140c007b4aca4d.png)
+![](/img/upload_47c57a6d265998ce38140c007b4aca4d.png)
 
 There's not a lot going on here. There are two karton services running - a classifier and a mwdb reporter. You can check out the queues, but understandably they're both empty.
 
@@ -108,9 +108,41 @@ if __name__ == "__main__":
 
 ```
 
-Doesn't look too complex, right?
+Hopefully it doesn't look too complex. This karton will run `strings` on the incoming file, and report the results.
+
+Using other tools is equally simple - for example, a (very simple) upx unpacker would run `upx -d` instead of `strings`.
+
+Now we can run it:
+
+```
+$ python3 karton-strings.py
+[2021-01-06 16:24:57,672][INFO] Service karton.strings started
+/home/msm/Projects/karton/demo/karton-strings/venv/lib/python3.6/site-packages/karton/core/logger.py:57: UserWarning: There is no active log consumer to receive logged messages.
+  warnings.warn("There is no active log consumer to receive logged messages.")
+[2021-01-06 16:24:57,676][INFO] Binding on: {'type': 'sample', 'stage': 'recognized'}
+```
+
+And test it, by uploading a file to mwdb:
+
+![](/img/mwdbupload.png)
+
+Take a look at the karton logs again, you should see something like:
+
+```
+[2021-01-06 16:33:13,567][INFO] Received new task - fd9bc4d0-c51e-4c16-b40e-7d6d19c24e02
+[2021-01-06 16:33:13,568][INFO] Hi qpc.exe.xx, let me analyse you!
+[2021-01-06 16:33:13,804][INFO] Task done - fd9bc4d0-c51e-4c16-b40e-7d6d19c24e02
+```
+
+Great! This means that everything works on our side. By the way, if your task crashed (for example, you made a typo when rewriting), you can always retry it by nagivating to http://127.0.0.1:8030/queue/karton.strings/crashed and clicking "retry".
+
 
 ### 4. Create your own karton
 
-1. karton-boxjs
+Finally, let's try something more practical. We'll try to create a karton for the boxjs tool and plug it into our pipeline.
 
+(...)
+
+### 5. Parting thougts
+
+Karton is so cool omgosh i love it.

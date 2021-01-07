@@ -32,7 +32,7 @@ class KartonAnalysisResource(Resource):
                         task.headers["origin"] for task in queue.pending_tasks
                     )),
                     "status": list(set(
-                        task.status for task in queue.pending_tasks
+                        task.status.value for task in queue.pending_tasks
                     ))
                 }
                 for queue_name, queue in analysis.pending_queues.items()

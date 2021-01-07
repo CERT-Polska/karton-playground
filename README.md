@@ -145,4 +145,13 @@ Finally, let's try something more practical. We'll try to create a karton for th
 
 ### 5. Parting thougts
 
-Karton is so cool omgosh i love it.
+Hopefully that wasn't too hard. We've tried to give representative examples of kartons you may want to create, but of course they're oversimplified.
+
+The true power of karton lies in the composability, for example imagine a pair of kartons:
+
+- `karton-url-extractor` that extracts (potentially) malicious URLs from incoming samples and sends them to karton
+- `karton-downloader` that downloads incoming URLs and sends them for further processing
+
+They are both useless alone, but together together they form a great team. And later we can easily add new consumers and producers of URLs (for example twitter scrappers, external feeds like urlhaus, etc).
+
+That's it for now, good luck in your karton endeavours.

@@ -46,12 +46,6 @@ There's not a lot going on here. There are two karton services running - a class
 
 And that's about it. There's also a minio interface available at http://127.0.0.1:8090 where all the samples, analysis artifact and temporary files live (login with `mwdb:mwdbmwdb`).
 
-```
-maybe mwdblib?
-
-> ipython/jupyter :thinking_face: 
-```
-
 ### 3. My first karton task
 
 Let's play with karton. Right now, the tasks will pass right through the karton, becasue there is no "real work" going on. Let's create a simple Karton service to make things a bit more interesting. We will run `strings` on every incoming sample, and save the result into a new [TODO] in mwdb.
@@ -141,7 +135,7 @@ Great! This means that everything works on our side. By the way, if your task cr
 
 Finally, let's try something more practical. We'll try to create a karton for the boxjs tool and plug it into our pipeline.
 
-(...)
+TBD
 
 ### 5. Parting thougts
 

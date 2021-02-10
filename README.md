@@ -1,7 +1,5 @@
 # Karton Playground: getting started
 
-![](/img/upload_b7d8d61a76ba1cd8ec411d6b2a738cf9.png)
-
 This is a repository that will help you get into Karton and create your own services immediately.
 
 Karton is our distributed malware processing framework. If you don't know what it is and want to learn more, take a look at https://github.com/CERT-Polska/karton.
@@ -16,10 +14,10 @@ The remainder of this tutorial will assume that you at least voguely know what y
 
 ### 1. Set up the playground
 
-First, download, clone and run [the playground](http://link_do_githuba). This will create a friendly environment to help you get on your feet. Remember that it is not intend for production, but as a simple way to start your journey into the kartonverse.
+First, download, clone and run the playground. This will create a friendly environment to help you get on your feet. Remember that it is not intend for production, but as a simple way to start your journey into the kartonverse.
 
 ```
-git clone https://github.com/karton-playground
+git clone https://github.com/CERT-Polska/karton-playground.git
 cd karton-playground
 sudo docker-compose up  # this may take a while
 ```
@@ -44,13 +42,15 @@ But there is no malware yet. This is about to change. But first, check out the k
 
 There's not a lot going on here. There are two karton services running - a classifier and a mwdb reporter. You can check out the queues, but understandably they're both empty.
 
-And that's about it. There's also a minio interface available at http://127.0.0.1:8090 where all the samples, analysis artifact and temporary files live (login with `mwdb:mwdbmwdb`).
+And that's about it. There's also a Minio interface available at http://127.0.0.1:8090 where all the samples, analysis artifact and temporary files live (login with `mwdb:mwdbmwdb`).
 
 ### 3. My first karton task
 
-Let's play with karton. Right now, the tasks will pass right through the karton, becasue there is no "real work" going on. Let's create a simple Karton service to make things a bit more interesting. We will run `strings` on every incoming sample, and save the result into a new [TODO] in mwdb.
+Let's play with karton. Right now, the tasks will pass right through the karton, because there is no "real work" going on. Let's create a simple Karton service to make things a bit more interesting. We will run `strings` on every incoming sample, and save the result into a new file in mwdb.
 
-Go into the toplevel directory of the playground, and create a proper environemnt:
+`karton-strings` is already contained in this repository, but if you want - you can recreate it as an exercise:
+
+Go into the top-level directory of the playground, and create a proper environemnt:
 
 ```bash
 $ mkdir karton-strings
@@ -130,10 +130,9 @@ Take a look at the karton logs again, you should see something like:
 
 Great! This means that everything works on our side. By the way, if your task crashed (for example, you made a typo when rewriting), you can always retry it by nagivating to http://127.0.0.1:8030/queue/karton.strings/crashed and clicking "retry".
 
-
 ### 4. Create your own karton
 
-Finally, let's try something more practical. We'll try to create a karton for the boxjs tool and plug it into our pipeline.
+Finally, let's try something more practical. We'll try to create a karton for the box-js tool and plug it into our pipeline.
 
 TBD
 

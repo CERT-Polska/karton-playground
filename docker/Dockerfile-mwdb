@@ -11,5 +11,8 @@ COPY docker/uwsgi.ini docker/start.sh /app/
 WORKDIR /app
 # Make fresh web build including plugins
 ENV MWDB_WEB_FOLDER /app/web
+ENV MWDB_ENABLE_PLUGINS 1
+ENV MWDB_PLUGINS mwdb_plugin_karton
+
 RUN mwdb-core configure web
 CMD ["/app/start.sh"]

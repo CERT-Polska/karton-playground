@@ -1,16 +1,18 @@
-import React, {useState } from 'react';
-import {connect} from 'react-redux';
-import api from "@mwdb-web/commons/api"
+import React, { useContext, useState } from 'react';
+import api from "@mwdb-web/commons/api";
+import { AuthContext } from "@mwdb-web/commons/auth";
 
-function FirstAnalysisBanner(props) {
-    const [submitted, setSubmitted] = useState(false)
+export default function FirstAnalysisBanner(props) {
+    const [submitted, setSubmitted] = useState(false);
+    const auth = useContext(AuthContext);
+    const isKartonManager = auth.hasCapability("karton_manage");
 
-    if(!props.isKartonManager || !props.attributes || props.object.type !== "file")
+    if(!isKartonManager || !props.attributes || props.object.type !== "file")
         return []
 
     if(Object.keys(props.attributes).some(
         label => props.attributes[label].some(
-            attr => attr.key == "karton"
+            attr => attr.key === "karton"
         )
     ))
         return []
@@ -26,7 +28,7 @@ function FirstAnalysisBanner(props) {
     return (
         <div className="alert alert-primary">
             Oh! You've never run a Karton analysis for this sample.
-            <button type="button" 
+            <button type="button"
                     disabled={submitted}
                     className="btn-xs btn-primary float-right"
                     onClick={analyze}>
@@ -34,15 +36,4 @@ function FirstAnalysisBanner(props) {
             </button>
         </div>
     )
-    
 }
-
-
-function mapStateToProps(state, ownProps) {
-    return {
-        ...ownProps,
-        isKartonManager: state.auth.loggedUser.capabilities.includes("karton_manage"),
-    }
-}
-
-export default connect(mapStateToProps)(FirstAnalysisBanner);

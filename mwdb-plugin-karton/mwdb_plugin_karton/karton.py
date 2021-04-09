@@ -1,10 +1,10 @@
-import logging
 import shutil
 import tempfile
 from typing import Optional
 
 from flask import g
 
+from mwdb.core import log
 from mwdb.model import Config, File, Object
 from mwdb.core.plugins import PluginHookHandler
 
@@ -15,16 +15,17 @@ from karton.core.task import TaskPriority
 
 from .config import config
 
-logger = logging.getLogger("mwdb.plugin.karton")
+logger = log.getLogger()
 
 
 def send_file_to_karton(file: File) -> str:
-
     try:
         path = file.get_path()
         tmpfile = None
     except Exception:
         # If get_path doesn't work: download content to NamedTemporaryFile
+        # It won't work if we use S3 storage and try to reanalyze
+        # existing file (not uploaded within the same request).
         tmpfile = tempfile.NamedTemporaryFile()
         file_stream = file.open()
         shutil.copyfileobj(file_stream, tmpfile)
@@ -56,7 +57,7 @@ def send_file_to_karton(file: File) -> str:
         tmpfile.close()
 
     file.add_metakey("karton", task.root_uid, check_permissions=False)
-    logger.info("File sent to Karton with %s", task.root_uid)
+    logger.info("File sent to karton with %s", task.root_uid)
     return task.root_uid
 
 
@@ -79,7 +80,7 @@ def send_config_to_karton(cfg: Config) -> str:
     )
     producer.send_task(task)
     cfg.add_metakey("karton", task.root_uid, check_permissions=False)
-    logger.info("Configuration sent to Karton with %s", task.root_uid)
+    logger.info("Configuration sent to karton with %s", task.root_uid)
     return task.root_uid
 
 
@@ -87,14 +88,14 @@ class KartonDispatcher(PluginHookHandler):
     def on_created_file(self, file: File) -> None:
         metakeys = file.get_metakeys(as_dict=True, check_permissions=False)
         if "karton" in metakeys:
-            logger.info("Analyzed artifact - not sending to Karton")
+            logger.info("Analyzed artifact - not sending to karton")
             return
         send_file_to_karton(file)
 
     def on_created_config(self, cfg: Config) -> None:
         metakeys = cfg.get_metakeys(as_dict=True, check_permissions=False)
         if "karton" in metakeys:
-            logger.info("Analyzed artifact - not sending to Karton")
+            logger.info("Analyzed artifact - not sending to karton")
             return
         send_config_to_karton(cfg)
 

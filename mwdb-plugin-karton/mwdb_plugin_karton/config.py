@@ -1,5 +1,5 @@
 from mwdb.core.config import AppConfig, app_config
-from mwdb.core.typedconfig import Config, group_key, key, section
+from typedconfig import Config, group_key, key, section
 
 
 @section("karton")

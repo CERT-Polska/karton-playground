@@ -1,11 +1,15 @@
-import React, {useState, useEffect } from 'react';
-import {connect} from 'react-redux';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import readableTime from 'readable-timestamp';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleNotch, faSearch, faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
+
 import api from "@mwdb-web/commons/api"
+import { AuthContext } from "@mwdb-web/commons/auth";
+
 import { makeSearchLink } from "@mwdb-web/commons/helpers";
+import { ActionCopyToClipboard } from "@mwdb-web/commons/ui";
 
 function KartonAttributeRow(props) {
     const [status, setStatus] = useState();
@@ -13,7 +17,7 @@ function KartonAttributeRow(props) {
 
     useEffect(() => {
         let isMounted = true;
-        if(props.uid && status == undefined)
+        if(props.uid && status === undefined)
         {
             api.axios.get(`/karton/${props.object.id}`, {
                 params: {
@@ -45,7 +49,7 @@ function KartonAttributeRow(props) {
     }, [props.uid])
 
     let queueStatusBadge = (queueStatus) => {
-        let badgeStyle = queueStatus == "Started" ? "success" : "secondary";
+        let badgeStyle = queueStatus === "Started" ? "success" : "secondary";
         return (
             <span className={`badge badge-${badgeStyle}`} style={{marginRight: "8pt"}}>
                 {queueStatus}
@@ -54,7 +58,6 @@ function KartonAttributeRow(props) {
     };
 
     let analysisStatusBadge = (analysisStatus) => {
-        console.log(analysisStatus);
         const badgeAttributes = ({
             [undefined]: {
                 icon: faCircleNotch,
@@ -79,8 +82,8 @@ function KartonAttributeRow(props) {
         })[analysisStatus];
         return (
             <span className={`badge badge-${badgeAttributes.style}`} style={{marginRight: "8pt"}}>
-                <FontAwesomeIcon icon={badgeAttributes.icon} 
-                                 pull="left"  
+                <FontAwesomeIcon icon={badgeAttributes.icon}
+                                 pull="left"
                                  spin={badgeAttributes.icon === faCircleNotch}/>
                 {badgeAttributes.message}
             </span>
@@ -121,7 +124,7 @@ function KartonAttributeRow(props) {
                 </span>
             </Link>
             {
-                status && status["status"] == "running" && props.isKartonManager
+                status && status["status"] === "running" && props.isKartonManager
                 ? (
                     <a href={`https://karton.cert.pl/analysis/${props.uid}`}>
                         <span className="badge badge-primary">
@@ -132,7 +135,7 @@ function KartonAttributeRow(props) {
                 ): []
             }
             {
-                props.isKartonManager 
+                props.isKartonManager
                 ? (
                     <a href={`https://buzz.cert.pl:8000/en-GB/app/search/karton_task_information?form.TASKUID=${props.uid}`}>
                         <span className="badge badge-primary">
@@ -147,15 +150,20 @@ function KartonAttributeRow(props) {
 
     return (
         <div className="card">
-            <div className="card-header">
+            <div className="card-header flickerable">
+                {
+                    analysisStatusBadge(
+                        (error && "error") || (status && status["status"])
+                    )
+                }
                 <button className="btn btn-link dropdown-toggle" data-toggle="collapse" data-target={`#collapse${props.uid}`}>
-                    {
-                        analysisStatusBadge(
-                            (error && "error") || (status && status["status"])
-                        )
-                    }
-                    <span>{props.uid}</span>
+                    <span>
+                        {props.uid}
+                    </span>
                 </button>
+                <span className="ml-2">
+                    <ActionCopyToClipboard text={props.uid} tooltipMessage="Copy analysis id to clipboard"/>
+                </span>
             </div>
             <div id={`collapse${props.uid}`} className="collapse">
                 <div className="card-body">
@@ -190,23 +198,26 @@ function KartonAttributeRow(props) {
     )
 }
 
-function KartonAttributeRenderer(props) {
+export default function KartonAttributeRenderer(props) {
     const [maxItems, setMaxItems] = useState(3);
     const [completedItems, setCompletedItems] = useState([]);
     const [visibleItems, setVisibleItems] = useState([]);
     const [canReanalyze, setCanReanalyze] = useState(false);
 
+    const auth = useContext(AuthContext);
+    const isKartonManager = auth.hasCapability("karton_manage");
+
     useEffect(() => {
         setVisibleItems(props.values.slice(0, maxItems).map(attr => attr.value));
     }, [maxItems, props.values]);
-    
+
     useEffect(() => {
         // User can reanalyze if all visible items are completed
         setCanReanalyze(
-            !!visibleItems.length && 
-            props.isKartonManager &&
+            !!visibleItems.length &&
+            isKartonManager &&
             visibleItems.every(uid => completedItems.includes(uid)))
-    }, [visibleItems, completedItems, props.isKartonManager])
+    }, [visibleItems, completedItems, isKartonManager])
 
     const submitAnalysis = async (ev) => {
         ev.preventDefault();
@@ -231,7 +242,7 @@ function KartonAttributeRenderer(props) {
                     <FontAwesomeIcon icon={faPlus} pull="left" />
                     reanalyze
                 </span>
-            </Link> 
+            </Link>
         ) :
         (
             <span className="badge badge-muted">
@@ -246,7 +257,7 @@ function KartonAttributeRenderer(props) {
             <KartonAttributeRow key={item}
                                 uid={item}
                                 object={props.object}
-                                isKartonManager={props.isKartonManager}
+                                isKartonManager={isKartonManager}
                                 onCompleted={(uid) => {
                                     setCompletedItems(
                                         (completed) => completed.concat([uid])
@@ -265,7 +276,7 @@ function KartonAttributeRenderer(props) {
             <td>
                 {attributesRows}
                 {
-                    maxItems < props.values.length 
+                    maxItems < props.values.length
                     ? (
                         <Link to="#" onClick={showMore}>
                             <span className="badge badge-primary">
@@ -275,19 +286,9 @@ function KartonAttributeRenderer(props) {
                     ) : []
                 }
                 {
-                    (props.isKartonManager && isFileObject) ? reanalyzeButton : []
+                    (isKartonManager && isFileObject) ? reanalyzeButton : []
                 }
             </td>
         </tr>
     )
 }
-
-function mapStateToProps(state, ownProps)
-{
-    return {
-        ...ownProps,
-        isKartonManager: state.auth.loggedUser.capabilities.includes("karton_manage"),
-    }
-}
-
-export default connect(mapStateToProps)(KartonAttributeRenderer);

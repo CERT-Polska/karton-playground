@@ -4,7 +4,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && apt install -y no
 RUN apt update && apt install -y build-essential libffi-dev libfuzzy-dev postgresql-client libmagic1
 
 COPY mwdb-plugin-karton/ /tmp/mwdb-plugin-karton/
-RUN pip install mwdb-core==2.1.2 karton-core==4.0.5 /tmp/mwdb-plugin-karton/
+RUN pip install mwdb-core==2.2.2 karton-core==4.2.0 /tmp/mwdb-plugin-karton/
 
 COPY docker/uwsgi.ini docker/start.sh /app/
 

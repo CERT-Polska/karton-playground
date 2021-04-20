@@ -27,7 +27,7 @@ services:
       - redis
       - minio
     volumes:
-      - ./config/karton.ini:/etc/karton/karton.ini
+      - ./config/karton.docker.ini:/etc/karton/karton.ini
       - ./config/mwdb.ini:/app/mwdb.ini
     environment:
       MWDB_REDIS_URI: "redis://redis/"
@@ -42,7 +42,7 @@ services:
       - redis
       - minio
     volumes:
-      - ./config/karton.ini:/etc/karton/karton.ini
+      - ./config/karton.docker.ini:/etc/karton/karton.ini
     entrypoint: karton-system
     command: --setup-bucket
   karton-classifier:
@@ -51,14 +51,14 @@ services:
       - redis
       - minio
     volumes:
-      - ./config/karton.ini:/etc/karton/karton.ini
+      - ./config/karton.docker.ini:/etc/karton/karton.ini
   karton-dashboard:
     image: certpl/karton-dashboard:2c35fb3cae399dba8913f8ad1be9dd6b820b1fd6
     depends_on:
       - redis
       - minio
     volumes:
-      - ./config/karton.ini:/etc/karton/karton.ini
+      - ./config/karton.docker.ini:/etc/karton/karton.ini
     ports:
       - "127.0.0.1:8030:5000"
   karton-mwdb-reporter:
@@ -67,4 +67,4 @@ services:
       - redis
       - minio
     volumes:
-      - ./config/karton.ini:/etc/karton/karton.ini
+      - ./config/karton.docker.ini:/etc/karton/karton.ini

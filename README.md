@@ -1,4 +1,6 @@
-# Karton Playground: getting started
+# Karton Playground
+
+![](./img/logo-sm.png)
 
 This is a repository that will help you get into Karton and create your own services immediately.
 

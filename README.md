@@ -56,7 +56,7 @@ Go into the top-level directory of the playground, and create a proper environem
 
 ```bash
 $ mkdir karton-strings
-$ cp config/karton.local.ini karton-strings/karton.ini  # create a local config
+$ cp config/karton.ini karton-strings/karton.ini  # create a local config
 $ cd karton-strings
 $ python3 -m venv venv; source ./venv/bin/activate
 $ pip install karton-core==4.0.4

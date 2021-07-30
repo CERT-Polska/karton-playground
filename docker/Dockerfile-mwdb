@@ -3,8 +3,7 @@ FROM python:3.8
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && apt install -y nodejs
 RUN apt update && apt install -y build-essential libffi-dev libfuzzy-dev postgresql-client libmagic1
 
-COPY mwdb-plugin-karton/ /tmp/mwdb-plugin-karton/
-RUN pip install mwdb-core==2.2.2 karton-core==4.2.0 /tmp/mwdb-plugin-karton/
+RUN pip install mwdb-core==2.4.0 karton-core==4.2.0
 
 COPY docker/uwsgi.ini docker/start.sh /app/
 
@@ -12,7 +11,6 @@ WORKDIR /app
 # Make fresh web build including plugins
 ENV MWDB_WEB_FOLDER /app/web
 ENV MWDB_ENABLE_PLUGINS 1
-ENV MWDB_PLUGINS mwdb_plugin_karton
 
 RUN mwdb-core configure web
 CMD ["/app/start.sh"]

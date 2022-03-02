@@ -37,7 +37,7 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
   karton-system:
-    image: certpl/karton-system:158d07960d8cd39dee8771af719f560df93b3212
+    image: certpl/karton-system:cb68f9fd7a5e9dc6b6a8538d71ebc0e43f5cc69c
     depends_on:
       - redis
       - minio
@@ -46,14 +46,14 @@ services:
     entrypoint: karton-system
     command: --setup-bucket
   karton-classifier:
-    image: certpl/karton-classifier:320c99de8e05ff3d029609e73ac31bcf2d0ba56c
+    image: certpl/karton-classifier:84c642c666334db3df66b98752784c2044aa3c2d
     depends_on:
       - redis
       - minio
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
   karton-dashboard:
-    image: certpl/karton-dashboard:2c35fb3cae399dba8913f8ad1be9dd6b820b1fd6
+    image: certpl/karton-dashboard:8f5bdd94bed2ddff2ef4a826f8107a8ec11e8609
     depends_on:
       - redis
       - minio
@@ -62,7 +62,7 @@ services:
     ports:
       - "127.0.0.1:8030:5000"
   karton-mwdb-reporter:
-    image: certpl/karton-mwdb-reporter:a4a5a2ece14073e3a25a38bd5f1b0fa14ba725d3
+    image: certpl/karton-mwdb-reporter:1afa32251b4826eac4386596b4a20f295699faec
     depends_on:
       - redis
       - minio

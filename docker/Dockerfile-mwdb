@@ -1,16 +1,11 @@
 FROM python:3.8
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install -y nodejs
 RUN apt update && apt install -y build-essential libffi-dev libfuzzy-dev postgresql-client libmagic1
 
-RUN pip install mwdb-core==2.6.1 karton-core==4.3.0
+RUN pip install mwdb-core==2.7.0 karton-core==4.3.0
 
 COPY docker/uwsgi.ini docker/start.sh /app/
 
 WORKDIR /app
-# Make fresh web build including plugins
-ENV MWDB_WEB_FOLDER /app/web
-ENV MWDB_ENABLE_PLUGINS 1
 
-RUN mwdb-core configure web
 CMD ["/app/start.sh"]

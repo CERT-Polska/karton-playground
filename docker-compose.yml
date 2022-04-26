@@ -2,12 +2,13 @@ version: "3.3"
 services:
   minio:
     image: minio/minio
-    command: "server --address 0.0.0.0:9000 /data"
+    command: "server --address 0.0.0.0:9000 --console-address :8070 /data"
     environment:
       MINIO_ACCESS_KEY: mwdb
       MINIO_SECRET_KEY: mwdbmwdb
     ports:
       - "127.0.0.1:8090:9000"
+      - "127.0.0.1:8070:8070"
   postgres:
     image: postgres:13.1
     environment:

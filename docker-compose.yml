@@ -2,7 +2,8 @@ version: "3.3"
 services:
   minio:
     image: minio/minio
-    command: "server --address 0.0.0.0:9000 --console-address :8070 /data"
+    entrypoint: sh
+    command: -c "mkdir -p /data/mwdb && minio server --address 0.0.0.0:9000 --console-address :8070 /data"
     environment:
       MINIO_ACCESS_KEY: mwdb
       MINIO_SECRET_KEY: mwdbmwdb
@@ -38,7 +39,7 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
   karton-system:
-    image: certpl/karton-system:v5.0.0
+    image: certpl/karton-system:v5.1.0
     depends_on:
       - redis
       - minio

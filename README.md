@@ -138,7 +138,7 @@ Finally, let's try something more practical. We'll try to create a karton for th
 
 TBD
 
-### 5. Parting thougts
+### 5. Parting thoughts
 
 Hopefully that wasn't too hard. We've tried to give representative examples of kartons you may want to create, but of course they're oversimplified.
 

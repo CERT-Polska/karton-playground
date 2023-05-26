@@ -6,7 +6,7 @@ This is a repository that will help you get into Karton and create your own serv
 
 Karton is our distributed malware processing framework. If you don't know what it is and want to learn more, take a look at https://github.com/CERT-Polska/karton.
 
-The remainder of this tutorial will assume that you at least voguely know what you want from Karton.
+The remainder of this tutorial will assume that you at least vaguely know what you want from Karton.
 
 ### List of services:
 
@@ -138,7 +138,7 @@ Finally, let's try something more practical. We'll try to create a karton for th
 
 TBD
 
-### 5. Parting thougts
+### 5. Parting thoughts
 
 Hopefully that wasn't too hard. We've tried to give representative examples of kartons you may want to create, but of course they're oversimplified.
 

@@ -34,7 +34,7 @@ Open your browser and navigate to http://127.0.0.1:8080. You should see this:
 
 ![](/img/upload_75219ec442a89156f0801e11cfdb0fe2.png)
 
-Now login with username `admin` and password `admin`. Volia, an empty malware database:
+Now login with username `admin` and password `admin`. Voilà, an empty malware database:
 
 ![](/img/upload_2088af2b5927b5928773648be95ff313.png)
 
@@ -59,7 +59,7 @@ $ mkdir karton-strings
 $ cp config/karton.ini karton-strings/karton.ini  # create a local config
 $ cd karton-strings
 $ python3 -m venv venv; source ./venv/bin/activate
-$ pip install karton-core==4.0.4
+$ pip install karton-core==5.3.0
 $ vim karton-strings.py
 ```
 
@@ -99,8 +99,7 @@ class Strings(Karton):
 
 
 if __name__ == "__main__":
-    # Here comes the main loop
-    Strings().loop()
+    Strings.main()
 
 ```
 
@@ -130,7 +129,7 @@ Take a look at the karton logs again, you should see something like:
 [2021-01-06 16:33:13,804][INFO] Task done - fd9bc4d0-c51e-4c16-b40e-7d6d19c24e02
 ```
 
-Great! This means that everything works on our side. By the way, if your task crashed (for example, you made a typo when rewriting), you can always retry it by nagivating to http://127.0.0.1:8030/queue/karton.strings/crashed and clicking "retry".
+Great! This means that everything works on our side. By the way, if your task crashed (for example, you made a typo when rewriting), you can always retry it by navigating to http://127.0.0.1:8030/queue/karton.strings/crashed and clicking "retry".
 
 ### 4. Create your own karton
 

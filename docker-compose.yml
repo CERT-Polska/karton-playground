@@ -47,7 +47,7 @@ services:
     ports:
       - "127.0.0.1:8080:80"
   karton-system:
-    image: certpl/karton-system:v5.2.0
+    image: certpl/karton-system:v5.3.0
     depends_on:
       - redis
       - minio

@@ -38,9 +38,12 @@ services:
   mwdb:
     image: certpl/mwdb:v2.10.1
     depends_on:
-      - postgres
-      - redis
-      - minio
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     environment:
@@ -69,8 +72,10 @@ services:
   karton-system:
     image: certpl/karton-system:v5.3.0
     depends_on:
-      - redis
-      - minio
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     entrypoint: karton-system
@@ -101,5 +106,6 @@ services:
     depends_on:
       - redis
       - minio
+      - mwdb-web
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini

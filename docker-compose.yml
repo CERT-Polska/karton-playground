@@ -10,22 +10,40 @@ services:
     ports:
       - "127.0.0.1:8090:9000"
       - "127.0.0.1:8070:8070"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
   postgres:
     image: postgres:13.1
     environment:
       POSTGRES_USER: mwdb
       POSTGRES_DB: mwdb
       POSTGRES_PASSWORD: mwdbsecretpass
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "mwdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   redis:
     image: redis:alpine
     ports:
       - "127.0.0.1:8379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
   mwdb:
     image: certpl/mwdb:v2.10.1
     depends_on:
-      - postgres
-      - redis
-      - minio
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     environment:
@@ -46,11 +64,18 @@ services:
     image: certpl/mwdb-web:v2.10.1
     ports:
       - "127.0.0.1:8080:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/server"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
   karton-system:
     image: certpl/karton-system:v5.3.0
     depends_on:
-      - redis
-      - minio
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     entrypoint: karton-system
@@ -71,10 +96,16 @@ services:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     ports:
       - "127.0.0.1:8030:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/varz"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
   karton-mwdb-reporter:
     image: certpl/karton-mwdb-reporter:v1.3.0
     depends_on:
       - redis
       - minio
+      - mwdb-web
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini

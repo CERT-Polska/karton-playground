@@ -1,6 +1,4 @@
-# Karton Playground
-
-![](./img/logo.png)
+# Karton Playground <img src="img/logo.png" width="64">
 
 This is a repository that will help you get into Karton and create your own services immediately.
 
@@ -21,7 +19,7 @@ First, download, clone and run the playground. This will create a friendly envir
 ```
 git clone https://github.com/CERT-Polska/karton-playground.git
 cd karton-playground
-sudo docker-compose up  # this may take a while
+docker compose up  # this may take a while
 ```
 
 That's it! A simple karton deployment is running on your local machine. Let's take a look around.
@@ -139,13 +137,13 @@ TBD
 
 ### 5. Parting thoughts
 
-Hopefully that wasn't too hard. We've tried to give representative examples of kartons you may want to create, but of course they're oversimplified.
+Hopefully that wasn't too hard. We've tried to give representative examples of karton services you may want to create, but of course they're oversimplified.
 
-The true power of karton lies in the composability, for example imagine a pair of kartons:
+The true power of karton lies in the composability, for example imagine a pair of karton services:
 
 - `karton-url-extractor` that extracts (potentially) malicious URLs from incoming samples and sends them to karton
 - `karton-downloader` that downloads incoming URLs and sends them for further processing
 
-They are both useless alone, but together together they form a great team. And later we can easily add new consumers and producers of URLs (for example twitter scrappers, external feeds like urlhaus, etc).
+They are both useless alone, but together together they form a great team. And later we can easily add new consumers and producers of URLs (for example twitter scrappers, external feeds like URLhaus, etc).
 
 That's it for now, good luck in your karton endeavours.

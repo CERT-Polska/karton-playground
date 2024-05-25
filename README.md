@@ -10,7 +10,7 @@ The remainder of this tutorial will assume that you at least vaguely know what y
 
 - `127.0.0.1:8030` karton-dashboard
 - `127.0.0.1:8080` mwdb-core (user: admin, password: admin)
-- `127.0.0.1:8090` minio (user: mwdb, password: mwdbmwdb)
+- `127.0.0.1:8070` minio (user: mwdb, password: mwdbmwdb)
 
 ### 1. Set up the playground
 

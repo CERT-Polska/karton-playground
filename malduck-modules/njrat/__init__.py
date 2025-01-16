@@ -1,0 +1,1 @@
+from .njrat import Njrat

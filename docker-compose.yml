@@ -106,3 +106,12 @@ services:
       - mwdb-web
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
+  karton-config-extractor:
+    image: certpl/karton-config-extractor:v2.3.1
+    depends_on:
+      - karton-system
+      - mwdb-web
+    entrypoint: karton-config-extractor --modules /opt/malduck-modules/
+    volumes:
+      - ./config/karton.docker.ini:/etc/karton/karton.ini
+      - ./malduck-modules/:/opt/malduck-modules

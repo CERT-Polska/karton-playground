@@ -2,7 +2,7 @@ from karton.core import Karton, Task, Resource
 import subprocess
 
 
-class Strings(Karton):
+class StringsKarton(Karton):
     """
     Runs the `strings` utility on incoming samples
     """
@@ -31,5 +31,5 @@ class Strings(Karton):
 
 
 if __name__ == "__main__":
-    # Here comes the main loop
-    Strings().loop()
+    # Here comes the main
+    StringsKarton.main()

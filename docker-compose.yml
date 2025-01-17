@@ -16,7 +16,7 @@ services:
       timeout: 5s
       retries: 3
   postgres:
-    image: postgres:13.1
+    image: postgres:17.2
     environment:
       POSTGRES_USER: mwdb
       POSTGRES_DB: mwdb
@@ -36,7 +36,7 @@ services:
       timeout: 3s
       retries: 10
   mwdb:
-    image: certpl/mwdb:v2.10.1
+    image: certpl/mwdb:v2.14.0
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,7 +61,7 @@ services:
   mwdb-web:
     depends_on:
       - mwdb
-    image: certpl/mwdb-web:v2.10.1
+    image: certpl/mwdb-web:v2.14.0
     ports:
       - "127.0.0.1:8080:80"
     healthcheck:
@@ -70,7 +70,7 @@ services:
       timeout: 20s
       retries: 3
   karton-system:
-    image: certpl/karton-system:v5.3.0
+    image: certpl/karton-system:v5.5.1
     depends_on:
       minio:
         condition: service_healthy
@@ -83,15 +83,13 @@ services:
   karton-classifier:
     image: certpl/karton-classifier:v2.0.0
     depends_on:
-      - redis
-      - minio
+      - karton-system
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
   karton-dashboard:
-    image: certpl/karton-dashboard:v1.5.0
+    image: certpl/karton-dashboard:v1.6.0
     depends_on:
-      - redis
-      - minio
+      - karton-system
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     ports:
@@ -104,8 +102,7 @@ services:
   karton-mwdb-reporter:
     image: certpl/karton-mwdb-reporter:v1.3.0
     depends_on:
-      - redis
-      - minio
+      - karton-system
       - mwdb-web
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini

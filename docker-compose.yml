@@ -95,7 +95,7 @@ services:
     ports:
       - "127.0.0.1:8030:5000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/varz"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/static/bootstrap.css"]
       interval: 30s
       timeout: 20s
       retries: 3

@@ -69,7 +69,7 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-  karton-system:
+  karton-system-router:
     image: certpl/karton-system:v5.5.1
     depends_on:
       minio:
@@ -79,7 +79,16 @@ services:
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     entrypoint: karton-system
-    command: --setup-bucket
+    command: --setup-bucket --disable-gc
+  karton-system-gc:
+    image: certpl/karton-system:v5.5.1
+    depends_on:
+      karton-system-router:
+        condition: service_started
+    volumes:
+      - ./config/karton.docker.ini:/etc/karton/karton.ini
+    entrypoint: karton-system
+    command: --disable-router
   karton-classifier:
     image: certpl/karton-classifier:v2.0.0
     depends_on:

@@ -92,13 +92,13 @@ services:
   karton-classifier:
     image: certpl/karton-classifier:v2.0.0
     depends_on:
-      - karton-system
+      - karton-system-router
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
   karton-dashboard:
     image: certpl/karton-dashboard:v1.6.0
     depends_on:
-      - karton-system
+      - karton-system-router
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
     ports:
@@ -111,14 +111,14 @@ services:
   karton-mwdb-reporter:
     image: certpl/karton-mwdb-reporter:v1.3.0
     depends_on:
-      - karton-system
+      - karton-system-router
       - mwdb-web
     volumes:
       - ./config/karton.docker.ini:/etc/karton/karton.ini
   karton-config-extractor:
     image: certpl/karton-config-extractor:v2.3.1
     depends_on:
-      - karton-system
+      - karton-system-router
       - mwdb-web
     entrypoint: karton-config-extractor --modules /opt/malduck-modules/
     volumes:

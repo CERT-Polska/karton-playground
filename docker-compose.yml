@@ -3,7 +3,7 @@ services:
   minio:
     image: minio/minio
     entrypoint: sh
-    command: -c "mkdir -p /data/mwdb && minio server --address 0.0.0.0:9000 --console-address :8070 /data"
+    command: -c "mkdir -p /data/mwdb /data/karton && minio server --address 0.0.0.0:9000 --console-address :8070 /data"
     environment:
       MINIO_ACCESS_KEY: mwdb
       MINIO_SECRET_KEY: mwdbmwdb
@@ -36,7 +36,7 @@ services:
       timeout: 3s
       retries: 10
   mwdb:
-    image: certpl/mwdb:v2.14.0
+    image: certpl/mwdb:v2.17.0
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,7 +61,7 @@ services:
   mwdb-web:
     depends_on:
       - mwdb
-    image: certpl/mwdb-web:v2.14.0
+    image: certpl/mwdb-web:v2.17.0
     ports:
       - "127.0.0.1:8080:80"
     healthcheck:
@@ -70,7 +70,7 @@ services:
       timeout: 20s
       retries: 3
   karton-system-router:
-    image: certpl/karton-system:v5.5.1
+    image: certpl/karton-system:v5.9.0
     depends_on:
       minio:
         condition: service_healthy
@@ -81,7 +81,7 @@ services:
     entrypoint: karton-system
     command: --setup-bucket --disable-gc
   karton-system-gc:
-    image: certpl/karton-system:v5.5.1
+    image: certpl/karton-system:v5.9.0
     depends_on:
       karton-system-router:
         condition: service_started
@@ -90,7 +90,7 @@ services:
     entrypoint: karton-system
     command: --disable-router
   karton-classifier:
-    image: certpl/karton-classifier:v2.0.0
+    image: certpl/karton-classifier:v2.1.0
     depends_on:
       - karton-system-router
     volumes:

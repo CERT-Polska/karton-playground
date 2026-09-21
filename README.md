@@ -10,7 +10,7 @@ The remainder of this tutorial will assume that you at least vaguely know what y
 
 - `127.0.0.1:8030` karton-dashboard
 - `127.0.0.1:8080` mwdb-core (user: admin, password: admin)
-- `127.0.0.1:8070` minio (user: mwdb, password: mwdbmwdb)
+- `127.0.0.1:8070` silo (user: mwdb, password: mwdbmwdb)
 
 ### 1. Set up the playground
 
@@ -42,7 +42,7 @@ But there is no malware yet. This is about to change. But first, check out the k
 
 There's not a lot going on here. There are two karton services running - a classifier and a mwdb reporter. You can check out the queues, but understandably they're both empty.
 
-And that's about it. There's also a Minio interface available at http://127.0.0.1:8090 where all the samples, analysis artifact and temporary files live (login with `mwdb:mwdbmwdb`).
+And that's about it. There's also a Silo interface available at http://127.0.0.1:8090 where all the samples, analysis artifact and temporary files live (login with `mwdb:mwdbmwdb`).
 
 ### 3. My first karton task
 

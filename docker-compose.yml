@@ -1,12 +1,12 @@
 version: "3.3"
 services:
-  minio:
-    image: minio/minio
+  silo:
+    image: pgsty/silo:RELEASE.2026-09-16T00-00-00Z
     entrypoint: sh
-    command: -c "mkdir -p /data/mwdb /data/karton && minio server --address 0.0.0.0:9000 --console-address :8070 /data"
+    command: -c "mkdir -p /data/mwdb /data/karton && silo server --address 0.0.0.0:9000 --console-address :8070 /data"
     environment:
-      MINIO_ACCESS_KEY: mwdb
-      MINIO_SECRET_KEY: mwdbmwdb
+      MINIO_ROOT_USER: mwdb
+      MINIO_ROOT_PASSWORD: mwdbmwdb
     ports:
       - "127.0.0.1:8090:9000"
       - "127.0.0.1:8070:8070"
@@ -40,7 +40,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      minio:
+      silo:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -53,7 +53,7 @@ services:
       MWDB_SECRET_KEY: "secretkey"
       MWDB_STORAGE_PROVIDER: "s3"
       MWDB_HASH_PATHING: "0"
-      MWDB_S3_STORAGE_ENDPOINT: "minio:9000"
+      MWDB_S3_STORAGE_ENDPOINT: "silo:9000"
       MWDB_S3_STORAGE_ACCESS_KEY: "mwdb"
       MWDB_S3_STORAGE_SECRET_KEY: "mwdbmwdb"
       MWDB_S3_STORAGE_BUCKET_NAME: "mwdb"
@@ -72,7 +72,7 @@ services:
   karton-system-router:
     image: certpl/karton-system:v5.9.0
     depends_on:
-      minio:
+      silo:
         condition: service_healthy
       redis:
         condition: service_healthy
